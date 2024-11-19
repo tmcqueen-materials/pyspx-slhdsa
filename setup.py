@@ -22,9 +22,9 @@ def paramsets():
 
 def create_param_wrappers():
     for paramset in paramsets():
-        with open(os.path.join("src", "pyspx-slhdsa", paramset + ".py"), 'w') as f:
+        with open(os.path.join("src", "pyspx_slhdsa", paramset + ".py"), 'w') as f:
             f.write(
-                "from pyspx-slhdsa.bindings import PySPXBindings as _PySPXBindings\n"
+                "from pyspx_slhdsa.bindings import PySPXBindings as _PySPXBindings\n"
                 "from _spx_{} import ffi as _ffi, lib as _lib\n"
                 "\n"
                 "import sys\n"
@@ -53,7 +53,7 @@ class clean(_clean):
     def run(self):
         for paramset in paramsets():
             try:
-                os.remove(os.path.join("src", "pyspx-slhdsa", paramset + ".py"))
+                os.remove(os.path.join("src", "pyspx_slhdsa", paramset + ".py"))
             except:
                 pass
             if sys.version_info[0] < 3:
@@ -72,9 +72,9 @@ with open('README.md') as f:
     long_description = f.read()
 
 setup(
-    name="PySPX-SLHDSA",
+    name="PySPX_SLHDSA",
     version="0.5.1",
-    packages=['pyspx-slhdsa'],
+    packages=['pyspx_slhdsa'],
     author="Joost Rijneveld, Peter Schwabe, Ruben Gonzalez",
     author_email='contact@sphincs.org',
     url="https://github.com/tmcqueen-materials/pyspx-slhdsa",
@@ -92,7 +92,7 @@ setup(
     install_requires=["cffi>=1.0.0"],
     setup_requires=["cffi>=1.0.0"],
     tests_require=["pytest", "cffi>=1.0.0"],
-    cffi_modules=["src/pyspx-slhdsa/build.py:{}".format(x) for x in paramsets()],
+    cffi_modules=["src/pyspx_slhdsa/build.py:{}".format(x) for x in paramsets()],
     cmdclass={
         "build_py": build_py,
         "develop": develop,
