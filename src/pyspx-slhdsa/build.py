@@ -43,6 +43,10 @@ PARAM_SETS_SOURCES = {
         "sources": ["fips202.c", "hash_shake.c", "thash_shake_simple.c"],
         "headers": ["fips202.h", "shake_offsets.h"],
     },
+    "haraka":  {
+        "sources": ["haraka.c", "hash_haraka.c", "thash_haraka_simple.c"],
+        "headers": ["haraka.h", "haraka_offsets.h"],
+    },
 }
 
 spx_ref_dir = Path("src", "sphincsplus", "ref")
