@@ -9,12 +9,12 @@ PARAM_DIR_NAME = "params"
 
 SOURCES = [
     "address.c",
-    "randombytes.c", 
+    "randombytes.c",
     "merkle.c",
     "wots.c",
     "wotsx1.c",
     "utils.c",
-    "utilsx1.c", 
+    "utilsx1.c",
     "fors.c",
     "sign.c"
 ]
@@ -36,16 +36,12 @@ HEADERS = [
 
 PARAM_SETS_SOURCES = {
     "sha2": {
-        "sources": ["sha2.c", "hash_sha2.c", "thash_sha2_robust.c"],
+        "sources": ["sha2.c", "hash_sha2.c", "thash_sha2_simple.c"],
         "headers": ["sha2.h", "sha2_offsets.h"],
     },
     "shake":  {
-        "sources": ["fips202.c", "hash_shake.c", "thash_shake_robust.c"],
+        "sources": ["fips202.c", "hash_shake.c", "thash_shake_simple.c"],
         "headers": ["fips202.h", "shake_offsets.h"],
-    },
-    "haraka":  {
-        "sources": ["haraka.c", "hash_haraka.c", "thash_haraka_robust.c"],
-        "headers": ["haraka.h", "haraka_offsets.h"],
     },
 }
 
