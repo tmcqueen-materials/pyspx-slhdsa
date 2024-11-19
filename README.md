@@ -1,50 +1,49 @@
-# PySPX [![SPHINCS Python Bindings](https://github.com/sphincs/pyspx/actions/workflows/python-app.yml/badge.svg)](https://github.com/sphincs/pyspx/actions/workflows/python-app.yml)
+# PySPX-SLHDSA
 
-This repository contains a Python package that provides bindings for [SPHINCS+](https://github.com/sphincs/sphincsplus). It provides support for all standardized parameter sets for SLH-DSA (i.e. simple variants, SPHINCS+ version 3.1)
+This repository contains a Python package that provides bindings for [SPHINCS+](https://github.com/sphincs/sphincsplus). It provides support for the pure, empty context string, standardized parameter sets for SLH-DSA (i.e. simple variants, SPHINCS+ version 3.1)
 
-While this package is functionally complete, it may still be subject to small API changes.
-Currently, the bindings only wrap the reference code. Code optimized for specific platforms (such as machines with AVX2 or AESNI support) is ignored.
+Derived from [PySPX](https://github.com/sphincs/pyspx) with the minor changes required to support [SLH-DSA](https://doi.org/10.6028/NIST.FIPS.205).
 
 ### Installation
 
-The package is [available on PyPI](https://pypi.org/project/PySPX/) and can be installed by simply calling `pip install pyspx`.
-
-For Linux, binary wheels are available based on the `manylinux1` docker image. On other platforms it may take a few moments to compile the SPHINCS+ code. Currently the `sphincsplus` reference code requires `openssl` for its SHA256 function. When compiling from source, be sure to install openssl with development files.
+```
+git clone https://github.com/tmcqueen-materials/pyspx-slhdsa.git
+cd pyspx-slhdsa
+git submodule init
+git submodule update
+sudo pip install .
+```
 
 ### API
 
-After installing the package, import a specific instance of SPHINCS+ as follows (e.g. for `shake256-128f`):
+After installing the package, import a specific instance of SPHINCS+ SLH-DSA as follows (e.g. for `SLH-DSA-SHAKE-128f`):
 
 ```
-import pyspx.shake_128f
+import pyspx_slhdsa.shake_128f
 ```
 
 This exposes the following straight-forward functions. All parameters are assumed to be `bytes` objects. Similarly, the returned keys and signatures are `bytes`. The `verify` function returns a boolean indicating success or failure.
 
 ```
->>> public_key, secret_key = pyspx.shake_128f.generate_keypair(seed)
->>> signature = pyspx.shake_128f.sign(message, secret_key)
->>> pyspx.shake_128f.verify(message, signature, public_key)
+>>> public_key, secret_key = pyspx_slhdsa.shake_128f.generate_keypair(seed)
+>>> signature = pyspx_slhdsa.shake_128f.sign(message, secret_key)
+>>> pyspx_slhdsa.shake_128f.verify(message, signature, public_key)
 True
 ```
 
 Additionally, the following attributes expose the expected sizes, as a consequence of the selected parameter set:
 
 ```
->>> pyspx.shake_128f.crypto_sign_BYTES
-29792
->>> pyspx.shake_128f.crypto_sign_PUBLICKEYBYTES
+>>> pyspx_slhdsa.shake_128f.crypto_sign_BYTES
+17088
+>>> pyspx_slhdsa.shake_128f.crypto_sign_PUBLICKEYBYTES
+32
+>>> pyspx_slhdsa.shake_128f.crypto_sign_SECRETKEYBYTES
 64
->>> pyspx.shake_128f.crypto_sign_SECRETKEYBYTES
-128
->>> pyspx.shake_128f.crypto_sign_SEEDBYTES
-96
+>>> pyspx_slhdsa.shake_128f.crypto_sign_SEEDBYTES
+48
 ```
 
-### Custom SPHINCS+ parameters
+### Security
 
-It is fairly easy to compile with additional SPHINCS+ parameters.
-To do this, clone the repository, initialize the `src/sphincsplus` submodule (`git submodule init && git submodule update`),
-and add a new parameter set to `src/sphincsplus/ref/params`.
-Make sure to follow the `params-sphincs-[parameters-shorthand].h` naming convention.
-Installing the Python package from this modified source will expose the parameter set using the API described above.
+There has been no security analysis of this package. It primarily exists to provide seed-based deterministic key generation until supported by common libraries.

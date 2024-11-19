@@ -32,6 +32,9 @@ class PySPXBindings(object):
                               .format(len(secretkey),
                                       self.crypto_sign_SECRETKEYBYTES))
 
+        # Add SLH-DSA pure domain separator and empty context string
+        message = b'\x00\x00' + message
+
         sm = self.ffi.new("unsigned char[]",
                           len(message) + self.crypto_sign_BYTES)
         mlen = self.ffi.cast("unsigned long long", len(message))
@@ -54,6 +57,9 @@ class PySPXBindings(object):
         if len(signature) != self.crypto_sign_BYTES:
             raise MemoryError('Signature is of length {}, expected {}'
                               .format(len(signature), self.crypto_sign_BYTES))
+
+        # Add SLH-DSA pure domain separator and empty context string
+        message = b'\x00\x00' + message
 
         smlen = self.ffi.cast("unsigned long long",
                               len(message) + self.crypto_sign_BYTES)
