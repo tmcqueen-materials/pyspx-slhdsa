@@ -1,8 +1,10 @@
 # PySPX-SLHDSA
 
-This repository contains a Python package that provides bindings for [SPHINCS+](https://github.com/sphincs/sphincsplus). It provides support for the pure, empty context string, standardized parameter sets for SLH-DSA (i.e. simple variants, SPHINCS+ version 3.1)
+This repository contains a Python package that provides bindings for [SPHINCS+](https://github.com/sphincs/sphincsplus). It provides support for **SEEDED KEY GENERATION ONLY** of the pure, empty context string, standardized parameter sets for SLH-DSA (i.e. simple variants, SPHINCS+ version 3.1 derivative).
 
-Derived from [PySPX](https://github.com/sphincs/pyspx) with the minor changes required to support [SLH-DSA](https://doi.org/10.6028/NIST.FIPS.205).
+Derived from [PySPX](https://github.com/sphincs/pyspx) with the minor changes required to support [SLH-DSA](https://doi.org/10.6028/NIST.FIPS.205) (**SEEDED KEY GENERATION ONLY**).
+
+It **SHOULD** support Sign/Verify for SLH-DSA as well, except my tests show the sphincsplus submodule does not validate against NIST ACVP vectors even when on the consistent-basew branch. If someone tracks down why, let me know.
 
 ### Installation
 
