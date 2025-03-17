@@ -21,7 +21,16 @@ class PySPXBindings(object):
     def crypto_sign_SEEDBYTES(self):
         return self.lib.crypto_sign_seedbytes()
 
-    def sign(self, message, secretkey):
+    def sign(self, message, secretkey, ctx=b''):
+        if not isinstance(ctx, bytes) or len(ctx) > 255:
+            raise TypeError('Context string must be 0-255 bytes')
+        if not isinstance(message, bytes):
+            raise TypeError('Input message must be of type bytes')
+        # pure version only, add domain separator and ctx string for external interface
+        message = b'\x00' + bytes([len(ctx)]) + ctx + message
+        return self.sign_internal(message, secretkey)
+
+    def sign_internal(self, message, secretkey):
         if not isinstance(message, bytes):
             raise TypeError('Input message must be of type bytes')
         if not isinstance(secretkey, bytes):
@@ -32,9 +41,6 @@ class PySPXBindings(object):
                               .format(len(secretkey),
                                       self.crypto_sign_SECRETKEYBYTES))
 
-        # Add SLH-DSA pure domain separator and empty context string
-        message = b'\x00\x00' + message
-
         sm = self.ffi.new("unsigned char[]",
                           len(message) + self.crypto_sign_BYTES)
         mlen = self.ffi.cast("unsigned long long", len(message))
@@ -42,7 +48,16 @@ class PySPXBindings(object):
         self.lib.crypto_sign(sm, smlen, message, mlen, secretkey)
         return bytes(self.ffi.buffer(sm, self.crypto_sign_BYTES))
 
-    def verify(self, message, signature, publickey):
+    def verify(self, message, signature, publickey, ctx = b''):
+        if not isinstance(ctx, bytes) or len(ctx) > 255:
+            raise TypeError('Context string must be 0-255 bytes')
+        if not isinstance(message, bytes):
+            raise TypeError('Input message must be of type bytes')
+        # pure version only, add domain separator and ctx string for external interface
+        message = b'\x00' + bytes([len(ctx)]) + ctx + message
+        return self.verify_internal(message, signature, publickey)
+
+    def verify_internal(self, message, signature, publickey):
         if not isinstance(message, bytes):
             raise TypeError('Message must be of type bytes')
         if not isinstance(signature, bytes):
@@ -57,9 +72,6 @@ class PySPXBindings(object):
         if len(signature) != self.crypto_sign_BYTES:
             raise MemoryError('Signature is of length {}, expected {}'
                               .format(len(signature), self.crypto_sign_BYTES))
-
-        # Add SLH-DSA pure domain separator and empty context string
-        message = b'\x00\x00' + message
 
         smlen = self.ffi.cast("unsigned long long",
                               len(message) + self.crypto_sign_BYTES)
