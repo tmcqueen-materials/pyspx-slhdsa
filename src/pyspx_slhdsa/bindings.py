@@ -4,7 +4,6 @@ class PySPXBindings(object):
     def __init__(self, ffi, lib):
         self.ffi = ffi
         self.lib = lib
-        # TODO: detect instance type and run ACVP Sanity test for those parameters
 
     @property
     def crypto_sign_BYTES(self):

@@ -25,12 +25,13 @@ def create_param_wrappers():
         with open(os.path.join("src", "pyspx_slhdsa", paramset + ".py"), 'w') as f:
             f.write(
                 "from pyspx_slhdsa.bindings import PySPXBindings as _PySPXBindings\n"
+                "from pyspx_slhdsa.tests import PySPXTests as _PySPXTests\n"
                 "from _spx_{} import ffi as _ffi, lib as _lib\n"
                 "\n"
                 "import sys\n"
                 "\n"
-                "sys.modules[__name__] = _PySPXBindings(_ffi, _lib)\n"
-                .format(paramset)
+                "sys.modules[__name__] = _PySPXTests.test_paramset(_PySPXBindings(_ffi, _lib), '{}')\n"
+                .format(paramset, paramset)
             )
 
 
