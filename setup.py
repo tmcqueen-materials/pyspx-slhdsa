@@ -30,7 +30,7 @@ def create_param_wrappers():
                 "\n"
                 "import sys\n"
                 "\n"
-                "sys.modules[__name__] = _PySPXTests.test_paramset(_PySPXBindings(_ffi, _lib), '{}')\n"
+                "sys.modules[__name__] = _PySPXTests().test_paramset(_PySPXBindings(_ffi, _lib), '{}')\n"
                 .format(paramset, paramset)
             )
 
